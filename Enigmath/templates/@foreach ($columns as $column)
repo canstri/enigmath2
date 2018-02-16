@@ -1,0 +1,13 @@
+@foreach ($columns as $column)
+                                            <div class="item">
+                                            @foreach($column as $item)
+                                                @php $main = $item->children[0] @endphp
+                                                    <a class="header item">{{$main->label()}}</a>
+                                                @foreach($item->children as $key => $child)
+                                                     @if($key != 0)
+                                                        <a class="item">{{$child->label()}}</a>
+                                                    @endif
+                                                @endforeach
+                                            @endforeach
+                                            </div>
+                                        @endforeach

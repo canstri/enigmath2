@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class='col-sm-7 col-sm-offset-1'>
+    <h3 class="main-h1">{{ title }}</h1>
+    {% if staff == "yes" %} 
+        <h4 style="color: red"> Staff only: <a class="btn btn-info" href='{% url "olymps:create" %}' >Create Olympiad</a></h3>
+    {% endif %}
+
+    {% for obj in object_list %}
+    <div class="row">
+        <div class="thumbnail col-sm-12">
+            <div class="caption col-sm-4">
+                {% if obj.draft %}<h4 style="color: red">Staff only: Draft</h4>{% endif %} {% if obj.publish > today %}<h4>Staff Only: Future Olympiad</h4>{% endif %}
+                {% if obj.image %}
+                   <a href='{{ obj.get_absolute_url }}'><img class="olymp_image" src='{{ obj.image.url }}'/></a>
+                {% endif %}
+            </div>
+            <div class="">
+                    <h3><a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a> </h3>
+                    {% if staff == "yes" %} 
+                        <a href='{{ obj.get_update_url }}'>Edit</a> |
+                        <a href='{{ obj.get_delete_url }}'>Delete</a>
+                    {% endif %}
+                    <h5>Start: <a href="">{{ obj.start_time }}</a></h5>
+                    <p>Authors: <a href="{{ obj.get_author }}">{{ obj.user.username }}</a> </p>
+            </div>  
+        </div>
+
+    </div>
+    {% endfor %}
+
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if object_list.has_previous %}
+                <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+            </span>
+
+            {% if object_list.has_next %}
+                <a href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
+
+<p><br><br><br></p>
+    
+
+</div>
+<p><br><br><br></p>
+<div class='col-sm-3 col-sm-onset-8'>
+    <form method='GET' action=''>
+        <div class="input-group">
+            <input type='text' name='q' placeholder='Search olympiads' value='{{ request.GET.q }}'/>
+            <span class="input-group-btn">
+                <button class="btn btn-active" type="submit"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+
+</div>
+
+
+{% endblock content %}

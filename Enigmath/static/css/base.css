@@ -1,0 +1,81 @@
+h1{
+    font-weight:500;
+}
+
+.logo{
+    font-size: 26px;
+    text-transform: uppercase;
+    color: black;
+    border: 2px solid black;
+    padding: 1px 55px;
+    font-weight: 500;
+    font-family: 'Oswald', times, san-serif;
+    text-decoration: none;
+}
+.logo:hover{
+	color:black;
+	text-decoration: none;
+}
+
+.header-logo{
+	padding: 15px 0 !important;
+    margin-top: 0 !important;
+    //background-color: #4abdac;
+}
+
+.go-in a{
+    color: black;
+    font-weight: 600;
+    font-size: 15px;
+
+}
+
+.go-in {
+	margin-top:10px;
+    padding-top: 0 !important;
+    padding-bottom: 25px !important;
+}
+
+a:hover{
+	text-decoration: none;
+}
+
+.header-menu{
+    border-radius: unset !important;
+}
+
+.header-menu a{
+    font-weight: 600 !important;
+}
+.ui.footer.segment {
+    margin: 5em 0em 0em;
+    padding: 5em 0em;
+}
+
+.logo-footer{
+    letter-spacing: 8px;
+    padding: 8px;
+}
+
+
+#content-choice{
+    height:330px;
+    margin-top: 15px;
+}
+#segment-choice{
+    width: 100%;
+    border-radius: unset;
+}
+
+.content{
+    margin-top: 70px;
+    color: white;
+}
+#content-subject a{
+    font-weight:400;
+    color:black;
+}
+#content-subject{
+    margin-top: 30px;
+}
+

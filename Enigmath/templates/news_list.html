@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class='col-sm-7 col-sm-offset-1'>
+    <h3 class="main-h1">{{ title }}</h1>
+
+    {% if staff == "yes" %} 
+        <h4 style="color: red"> Staff only: <a class="btn btn-info" href='{% url "news:create" %}' >Create Post</a></h3>
+    {% endif %}
+    <br><br>
+
+                                
+    {% for obj in object_list %}
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="thumbnail">
+          <div class="caption">
+            
+            {% if obj.draft %}<h3>Staff only: Draft</h3>{% endif %} {% if obj.publish > today %}<h3>Staff Only: Future Post</h3>{% endif %}
+            
+            <h3>
+                <a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a> 
+                <small>{{ obj.publish }}</small>
+            </h3>
+            <p>Author: <a href="{{ obj.get_author }}">{{ obj.user.username }}</a> </p>
+
+            {% if staff == "yes" %} 
+                <a href='{{ obj.get_delete_url }}'>Delete</a> |
+                <a href='{{ obj.get_update_url }}'>Edit</a>
+            {% endif %}
+            
+            <p>{{ obj.get_markdown|truncatechars_html:20}}</p>
+
+            {% if obj.image %}
+                <img src='{{ obj.image.url }}'/>
+            {% endif %}
+            <p><br></p>
+
+            <div class='' >
+                <p class="likes_count">{{ obj.likes }} </p>
+                <a href=""><i class="fas fa-caret-up like_btn"></i></a> 
+                <a href=""><i class="fas fa-caret-down like_btn"></i></a> 
+            </div>
+            <a class="btn btn-info" href="{{ obj.get_absolute_url }}">View Post</a>
+            <a class="btn btn-default" href="{{ obj.get_absolute_url }}">{% if obj.comments.count == 0 %}Make first comment{% endif %} {% if obj.comments.count > 0 %}{{ obj.comments.count }} comment{% if obj.comments.count > 1 %}s{% endif %}{% endif %}</a>
+          
+          </div>
+        </div>
+      </div>
+    <hr/> 
+    </div>
+    {% endfor %}
+
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if object_list.has_previous %}
+                <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+            </span>
+
+            {% if object_list.has_next %}
+                <a href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
+
+
+
+</div>
+<p><br><br><br></p>
+<div class='col-sm-3 col-sm-onset-8'>
+    <form method='GET' action=''>
+        <div class="input-group">
+            <input type='text' name='q' placeholder='Search news' value='{{ request.GET.q }}'/>
+            <span class="input-group-btn">
+                <button class="btn btn-active" type="submit"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+
+</div>
+
+{% endblock content %}

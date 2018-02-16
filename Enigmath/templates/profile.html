@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load urlify %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+{{ user }} | {{ block.super }}
+{% endblock head_title %}
+
+
+{% block head_extra %} 
+	{{ form.media }}
+{% endblock head_extra %}
+
+
+{% block content %}
+	<div class="ui container">
+		<div class="ui grid">
+            <div class="five wide column">
+                <div class="ui raised card">
+                    <div class="image">
+                        {% if hisprofile.image %}
+                        <img src={{ hisprofile.image.url }}>
+                        {% endif %}
+                    </div>
+                    <div class="content">
+                        <div class="header">{{ hisprofile.user }}</div>
+                        <div class="meta">
+                            <p>{{ status }}</p>
+                        </div>
+                        <div class="description">
+
+                            {% if user == hisprofile.user %}
+                            <div>
+                                <form method='POST' action='' enctype="multipart/form-data">{% csrf_token %}
+                                    {{ form|crispy }}
+                                    <br>
+                                    <input type='submit' class='ui button green' value='Save' />
+                                </form>
+                            </div>
+                            {% else %}
+                            <strong>School: {{ school }}</strong>
+                            <strong>Birthday: {{ birthday }}</strong>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="extra content">
+                  <span class="right floated">
+                        Rating: {{ rating }}
+                  </span>
+                    </div>
+                </div>
+            </div>
+            <div class="eleven wide column ui raised card">
+
+                    <div class="content">
+                        <div class="header">Created problems:</div>
+                        <div class="meta">
+                            <span class="category">by {{ hisprofile.user }}</span>
+                        </div>
+                        <div class="description">
+                            {% for problem in problem_set %}
+                                <div class="ui feed">
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="date">
+                                                {{ problem.timestamp|timesince }} ago
+                                            </div>
+                                            <div class="summary">
+                                                You added problem 
+                                                <a href="{{ problem.content_object.get_absolute_url }}">
+                                                    {{ problem.title }}
+                                                </a> to <a>{{ problem.content_object.title }}</a>
+                                                 olympiad.
+                              <!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  -->
+                                                 <p style="color: darkred">{{ problem.content }}</p>
+                              <!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+            </div>
+
+
+
+
+		</div>
+	</div>
+
+
+
+	
+{% endblock content %}
+

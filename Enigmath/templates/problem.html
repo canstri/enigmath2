@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load urlify %}
+{% load crispy_forms_tags %}
+
+
+
+
+
+{% block content %}
+{{ object }}
+
+
+
+<div class='col-sm-10 col-sm-offset-1'>
+        <a class="btn btn-default" href="{{ problem.content_object.get_absolute_url }}">
+            <i class="fas fa-chevron-circle-left"></i> List of problems 
+        </a>
+            <h4>{{ problem.title }}</h4> 
+
+            {% if check_problem.solved == False %}
+                <h4>Not solved</h4>
+            {% else %}
+                <h4>Solved</h4>
+            {% endif %}
+            Author: <a href="{{ problem.get_profile }}">{{ problem.user }}</a>
+
+            <p>{{ problem.content }}</p>
+            <div class="small-details">
+              {% if request.user == problem.user %}<a href='{{ problem.get_delete_url }}'>Delete</a>{% endif %}
+            </div>
+        <hr/>
+        <br><br>
+        <div class="col-sm-5">
+            <form method="POST" action='' enctype='multipart/form-data'> {% csrf_token %}
+                {{ save_problem_form }}
+                <br><br>
+                <input type='submit' name = 'check' class='btn btn-info' value='Check' >
+                <input type='submit' name = 'save' class='btn btn-info' value='Save' >
+
+            </form>
+            <!-- <form  method="POST" action='' enctype='multipart/form-data'> {% csrf_token %}
+                {{ check_problem_form }}
+                <br><br>
+                <input type='submit' class='btn btn-info' value='Check' >
+            </form> -->
+           
+        </div>
+            
+
+        <div class="col-sm-2"><h4>Status: {{ action_check }}</h4></div>
+        <div class="col-sm-5">
+            <h4>{% if check_problem.actions|length == 0 %}Here will be your saved expressions{% endif %}{% if check_problem.actions|length > 0 %}{{ check_problem.actions|length }} Saved expression{% if check_problem.actions|length > 1 %}s{% endif %}:{% endif %}</h4>
+            {% for c in check_problem.actions %}
+                {% if c.1 != 'f' %}
+                    {{ c.0 }}
+                    {{ c.1 }}
+                
+                    <form method="POST" action='' enctype='multipart/form-data'>{% csrf_token %}
+                        {{ delete_expression_form }}
+                        <input type='hidden' name='exp_id' value='{{ forloop.counter }}'>
+                        <input type='submit' name = 'use' class='btn btn-info' value='Use' >
+                        <input type='submit' name='delete' class='btn btn-info' value='Delete' >
+                    </form>
+                    <hr>
+                {% endif %}
+            {% endfor %}
+            <br>
+
+
+        </div>
+
+
+        
+</div>
+
+
+{% endblock content %}

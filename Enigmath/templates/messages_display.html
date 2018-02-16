@@ -1,0 +1,19 @@
+{% if messages %}
+    <div class='messages ui message green container' id="message">
+
+    <ul class="messages ui list" style="list-style:none">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{% if "html_safe" in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}</li>
+    {% endfor %}
+    </ul>
+
+    </div>
+{% endif %}
+
+<style>
+    #message{
+        width: 300px;
+        margin-left: 57px !important;
+        margin-bottom: 60px;
+    }
+</style>
