@@ -1,5 +1,4 @@
 from sympy import *
-from mpmath import *
 
 
 
@@ -12,6 +11,7 @@ def isequal(input_exp):
     bool1 = False
     dannoe = input_exp
 
+   # dannoe = sympify(dannoe)
     if dannoe == '':
         return ('')
 

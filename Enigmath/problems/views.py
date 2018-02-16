@@ -82,7 +82,7 @@ def problem_thread(request, id):
             check_problem.actions.pop(0) 
             check_problem.save()
     if expression_form.is_valid():
-        expr_id = expression_form.cleaned_data.get('exp_id')
+        expr_id = expression_form.cleaned_data.get('exp_id')-1
         if 'delete' in request.POST:
             check_problem.actions.pop(expr_id) 
             check_problem.save()
