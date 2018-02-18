@@ -4,6 +4,16 @@
 .white{
     color: #FFF;
 }
+.green{
+    color: green;
+}
+.grey{
+    color: grey;
+}
+.small{
+    font-size: 90%;
+    font-weight: 300;
+}
 .space{
     margin-left: 15px;
 }
