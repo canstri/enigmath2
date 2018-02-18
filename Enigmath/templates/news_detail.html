@@ -7,146 +7,138 @@
 {% endblock head_title %}
 
 
-
-
 {% block content %}
-<div class='col-sm-7 col-sm-offset-1'>
-	{% if staff == "yes" %} 
-		<h4 style="color: red"> Staff only: <a class="btn btn-info" href='{% url "news:create" %}' >Create Post</a></h3>
-	{% endif %}
-    <br><br>
-    <a class="btn btn-default" href='{% url "news:list" %}'>
-			<i class="fas fa-chevron-circle-left"></i> Back to list 
-		</a>
-	<h1>{{ title }} <small>{{ instance.publish }}</small></h1>
-	
+<style type="text/css">
+    .target-news{
+        color: #ff7477 !important;
+    }
+</style>
 
-		<p>Author: <a href="{{ instance.get_author }}">{{ instance.user.username }}</a> </p>
+<div class='ui container'>
+    <div class="ui list">
+        <a class="button ui blue" href='{% url "news:list" %}'>
+            <i class="fas fa-chevron-circle-left"></i> Back to list
+        </a>
+        {% if staff == "yes" %}
+        <h3 style="color: red;"> Staff only: <a class="button ui green" href='{% url "news:create" %}'>Create Post</a></h3>
+        {% endif %}
 
-	{% if staff == "yes" %} 
-        <a href='{{ instance.get_delete_url }}'>Delete</a> |
-        <a href='{{ instance.get_update_url }}'>Edit</a>
-    {% endif %}
-
-	<div class='row'>
-		<div class='col-sm-12'>
-			{{ instance.get_markdown }}
-		<hr/>
-		{% if instance.image %}
-	    	<img src='{{ instance.image.url }}' />
-		{% endif %}
-
-		<br/>
-
-		</div>
-	</div>
-	<p><br></p>
-		
-    <hr/>
-    <br/>
-
-    <div>
-        <p class='lead'>
-			{{ comments.count }} Comment{% if comments.count > 1 or comments.count == 0 %}s{% endif %}
-        </p>
-        {% if is_auth == False %}
-	    	Please, <a href='{% url "login" %}'>login</a> to comment
-	    {% endif %}
-        <hr/>
-
-        {% for comment in comments_parents %}
-			<blockquote>
-				
-				
-					{% if comment.author.image %}
-						<a href="{{ comment.get_profile }}">
-							<img class="user_img_comments" src="{{ comment.author.image.url }}">
-						</a>
-					{% endif %}
-				
-				
-				<a href="{{ comment.get_profile }}">
-					{{ comment.user }}
-				</a>
- 		        <p>{{ comment.content }}</p>
-		        <div class="small-details">
-			        {{ comment.timestamp|timesince }} ago 
-			        {% if is_auth == True %}
-				        <a class='comment-reply-btn' href='#'>
-				        	| Reply
-				        </a>
-				    {% endif %}
-			        {% if request.user == comment.user or staff == "yes" %} | <a href='{{ comment.get_delete_url }}'>Delete</a>
-			        {% endif %}
-		        </div>
-		        {% if is_auth == True %}
-			        <div class='comment-reply'>  
-			        	<form method="POST" action="." enctype="multipart/form-data"> {% csrf_token %}
-			                {{ comment_form }}
-			                <br><br>
-			                <input type='hidden' name='parent_id' value='{{ comment.id }}'>
-			                <input type='submit' value='Reply' class='btn btn-info'>
-			            </form>
-			        </div>
-			    {% endif %}
-
-		        {% for child_comment in comment.children %}
-		        		<br>
-		                <blockquote>
-		                	
-		                	{% if child_comment.author.image %}
-								<a href="{{ child_comment.get_profile }}">
-									<img class="user_img_comments" src="{{ child_comment.author.image.url }}">
-								</a>
-							{% endif %}
-							
-			                <a href="{{ child_comment.get_profile }}">{{ child_comment.user }}</a>
-			                <p>{{ child_comment.content }}</p>
-			                <div class="small-details">{{ child_comment.timestamp|timesince }} ago
-				                {% if is_auth == True %}
-					                <a class='comment-children-reply-btn' href='#'>
-					        			| Reply
-					        		</a>
-					        	{% endif %}
-			                	{% if request.user == child_comment.user  or staff == "yes"%} 
-                    		      | <a href='{{ child_comment.get_delete_url }}'>Delete</a>
-                        		{% endif %}
-			                </div>
-			                {% if is_auth == True %}
-				                <div class='comment-reply'>  
-						        	<form method="POST" action="."> {% csrf_token %}
-						                {{ comment_form }}
-						                <br><br>
-						                <input type='hidden' name='parent_id' value='{{ comment.id }}'>
-						                <input type='submit' value='Reply' class='btn btn-info'>
-						            </form>
-			        			</div>	
-			        		{% endif %}	                
-		                </blockquote>
-		        {% endfor %}
+        <h1>{{ title }}</h1>
+        <h3>Created:<small>{{ instance.publish }}</small>
+        </h3>
 
 
-	        </blockquote>
+        <h4>Author: <a href="{{ instance.get_author }}">{{ instance.user.username }}</a></h4>
 
-	         <hr/>
+        {% if staff == "yes" %}
+        <a href='{{ instance.get_delete_url }}' class="ui red button">Delete</a>
+        <a href='{{ instance.get_update_url }}' class="ui orange button">Edit</a>
+        {% endif %}
 
-        {% endfor %}
-        {% if is_auth == True %}
-	        <form class="comment_form" method="POST" action='' enctype='multipart/form-data'> {% csrf_token %}
-	            {{ comment_form }}
-	            <br><br>
-	            <input type='submit' class='btn btn-info' value='Post comment' >
-	        </form>
-	    {% endif %}
+        <div class='row'>
+            <div class='col-sm-12'>
+                {{ instance.get_markdown }}
+                {% if instance.image %}
+                <img src='{{ instance.image.url }}'/>
+                {% endif %}
 
-        <br><br><br><br>
+
+            </div>
+        </div>
+
+
+
+        <div>
+            <p class='lead'>
+                {{ comments.count }} Comment{% if comments.count > 1 or comments.count == 0 %}s{% endif %}
+            </p>
+            {% if is_auth == False %}
+            Please, <a href='{% url "login" %}'>login</a> to comment
+            {% endif %}
+
+            {% for comment in comments_parents %}
+
+
+                {% if comment.author.image %}
+                <a href="{{ comment.get_profile }}">
+                    <img class="user_img_comments" src="{{ comment.author.image.url }}">
+                </a>
+                {% endif %}
+
+
+                <a href="{{ comment.get_profile }}">
+                    {{ comment.user }}
+                </a>
+                <p>{{ comment.content }}</p>
+                <div class="small-details" style="margin-bottom:20px">
+                    {{ comment.timestamp|timesince }} ago
+                    {% if is_auth == True %}
+                    <a class='button ui green' href='#'>
+                        Reply
+                    </a>
+                    {% endif %}
+                    {% if request.user == comment.user or staff == "yes" %}  <a href='{{ comment.get_delete_url }}' class="ui red button">Delete</a>
+                    {% endif %}
+                </div>
+                {% if is_auth == True %}
+                <div class='comment-reply'>
+                    <form method="POST" action="." enctype="multipart/form-data"> {% csrf_token %}
+                        {{ comment_form }}
+                        <br><br>
+                        <input type='hidden' name='parent_id' value='{{ comment.id }}'>
+                        <input type='submit' value='Reply' class='ui button green'>
+                    </form>
+                </div>
+                {% endif %}
+
+                {% for child_comment in comment.children %}
+
+                    {% if child_comment.author.image %}
+                    <a href="{{ child_comment.get_profile }}">
+                        <img class="user_img_comments" src="{{ child_comment.author.image.url }}">
+                    </a>
+                    {% endif %}
+
+                    <a href="{{ child_comment.get_profile }}">{{ child_comment.user }}</a>
+                    <p>{{ child_comment.content }}</p>
+                    <div class="small-details">{{ child_comment.timestamp|timesince }} ago
+                        {% if is_auth == True %}
+                        <a class='comment-children-reply-btn' href='#'>
+                            | Reply
+                        </a>
+                        {% endif %}
+                        {% if request.user == child_comment.user or staff == "yes"%}
+                        | <a href='{{ child_comment.get_delete_url }}'>Delete</a>
+                        {% endif %}
+                    </div>
+                    {% if is_auth == True %}
+                    <div class='comment-reply'>
+                        <form method="POST" action="."> {% csrf_token %}
+                            {{ comment_form }}
+                            <br><br>
+                            <input type='hidden' name='parent_id' value='{{ comment.id }}'>
+                            <input type='submit' value='Reply' class='ui button green'>
+                        </form>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+
+
+
+            {% endfor %}
+            {% if is_auth == True %}
+            <form class="comment_form" method="POST" action='' enctype='multipart/form-data'> {% csrf_token %}
+                {{ comment_form }}
+                <br>
+                <input type='submit' class='ui button green' value='Post comment'>
+            </form>
+            {% endif %}
+
+        </div>
     </div>
 
 </div>
-
-
-
-
 
 
 {% endblock content %}

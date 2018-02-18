@@ -7,14 +7,21 @@
 
 
 {% block content %}
+<style type="text/css">
+    .target-olymps{
+        color: #ff7477 !important;
+    }
+</style>
 
-<div class='col-sm-6'>
-	<h1>Create Olympiad</h1>
-	<div class="col-sm-11">
+
+<div class='ui container'>
+	<div class="ui segment" style="width:50%;line-height: 40px;">
+		<h1>Create Olympiad</h1>
 		<form method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
 			{{ form|crispy }}
-			<input type='submit' class='btn btn-primary' value='Create Olymp' />
+			<input type='submit' class='ui button green' style="margin-top: 20px;margin-bottom: 20px" value='Create Olymp' />
 		</form>
 	</div>
+
 </div>
 {% endblock content %}

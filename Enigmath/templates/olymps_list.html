@@ -1,35 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
+<style type="text/css">
+    .target-olymps{
+        color: #ff7477 !important;
+    }
+</style>
 
 
-<div class='col-sm-7 col-sm-offset-1'>
-    <h3 class="main-h1">{{ title }}</h1>
-    {% if staff == "yes" %} 
-        <h4 style="color: red"> Staff only: <a class="btn btn-info" href='{% url "olymps:create" %}' >Create Olympiad</a></h3>
-    {% endif %}
-
-    {% for obj in object_list %}
-    <div class="row">
-        <div class="thumbnail col-sm-12">
-            <div class="caption col-sm-4">
+<div class='ui container'>
+    <div class="ui grid">
+        <div class=" twelve wide column">
+            <h1>{{ title }}</h1>
+                {% if staff == "yes" %}
+                <h3 style="color: red"> Staff only: <a class="ui button red" href='{% url "olymps:create" %}' >Create Olympiad</a></h3>
+            {% endif %}
+        </div>
+        <div class='four wide column'>
+            <form method='GET' action=''>
+                <div class="ui action input">
+                    <input type='text' name='q' placeholder='Search olympiads' value='{{ request.GET.q }}'/>
+                    <button class="ui button" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+        {% for obj in object_list %}
+            <div class="ui segment" style="width:70%;">
                 {% if obj.draft %}<h4 style="color: red">Staff only: Draft</h4>{% endif %} {% if obj.publish > today %}<h4>Staff Only: Future Olympiad</h4>{% endif %}
                 {% if obj.image %}
-                   <a href='{{ obj.get_absolute_url }}'><img class="olymp_image" src='{{ obj.image.url }}'/></a>
+                    <a class="oneline" href='{{ obj.get_absolute_url }}'><img class="olymp-image" src='{{ obj.image.url }}'/></a>
                 {% endif %}
-            </div>
-            <div class="">
-                    <h3><a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a> </h3>
-                    {% if staff == "yes" %} 
-                        <a href='{{ obj.get_update_url }}'>Edit</a> |
+                <div class="oneline">
+                    <h3 class="oneline spacex2"><a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a> </h3>
+                    {% if staff == "yes" %}
+                        <a class="spacex2" href='{{ obj.get_update_url }}'>Edit</a> |
                         <a href='{{ obj.get_delete_url }}'>Delete</a>
                     {% endif %}
-                    <h5>Start: <a href="">{{ obj.start_time }}</a></h5>
-                    <p>Authors: <a href="{{ obj.get_author }}">{{ obj.user.username }}</a> </p>
-            </div>  
-        </div>
+                    <h5 class="oneline spacex2">Start: <a href="">{{ obj.start_time }}</a></h5>
+                    <p class="oneline spacex2">Authors: <a href="{{ obj.get_author }}">{{ obj.user.username }}</a> </p>
+                </div>
+            </div>
+        {% endfor %}
+</div>
 
-    </div>
-    {% endfor %}
+
+
 
 
     <div class="pagination">
@@ -49,22 +63,10 @@
     </div>
 
 
-<p><br><br><br></p>
-    
+
 
 </div>
-<p><br><br><br></p>
-<div class='col-sm-3 col-sm-onset-8'>
-    <form method='GET' action=''>
-        <div class="input-group">
-            <input type='text' name='q' placeholder='Search olympiads' value='{{ request.GET.q }}'/>
-            <span class="input-group-btn">
-                <button class="btn btn-active" type="submit"><i class="fa fa-search"></i></button>
-            </span>
-        </div>
-    </form>
 
-</div>
 
 
 {% endblock content %}
