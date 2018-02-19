@@ -69,7 +69,7 @@ class Problem(models.Model):
 class CheckProblem(models.Model):
     user = models.PositiveIntegerField(null = True)
     problem_id = models.PositiveIntegerField(null = True)
-    actions = ArrayField(ArrayField(models.TextField()), default=[['f', 'f']])
+    actions = ArrayField(ArrayField(models.TextField()), default=[['first', 'first_hidden']])
     solved = models.BooleanField(default=False) 
 
 

@@ -92,11 +92,7 @@ def olymp_detail(request, slug=None):
 
     array_of_user = []
     for prblm in instance.problems:
-        array_of_user.append([prblm, CheckProblem.objects.filter(user = request.user.id, problem_id = prblm.id)])
-
-    #check_problem = CheckProblem.objects.filter(user = request.user.id)
-   
-    
+        array_of_user.append([prblm, CheckProblem.objects.filter(user = request.user.id, problem_id = prblm.id)])    
     context = {
         "title": instance.title,
         "instance": instance,

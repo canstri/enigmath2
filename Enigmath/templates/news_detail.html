@@ -31,8 +31,8 @@
         <h4>Author: <a href="{{ instance.get_author }}">{{ instance.user.username }}</a></h4>
 
         {% if staff == "yes" %}
-        <a href='{{ instance.get_delete_url }}' class="ui red button">Delete</a>
-        <a href='{{ instance.get_update_url }}' class="ui orange button">Edit</a>
+        <a href='{{ instance.get_update_url }}' class="">Edit</a> |
+        <a href='{{ instance.get_delete_url }}' style="color: red;" class="space">Delete</a>
         {% endif %}
 
         <div class='row'>

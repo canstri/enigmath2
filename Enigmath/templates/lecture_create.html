@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %} 
+	{{ form.media }}
+{% endblock head_extra %}
+
+
+{% block content %}
+<style type="text/css">
+    .target-courses{
+        color: #ff7477 !important;
+    }
+</style>
+
+
+<div class='ui container'>
+	<div class="ui segment" style="width:50%;line-height: 40px;">
+		<h1>Create Lesson</h1>
+		<form method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+			{{ form|crispy }}
+			<input type='submit' class='ui button green' style="margin-top: 20px;margin-bottom: 20px" value='Create Lesson' />
+		</form>
+	</div>
+
+</div>
+{% endblock content %}

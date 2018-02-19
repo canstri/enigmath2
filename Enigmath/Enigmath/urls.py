@@ -31,7 +31,8 @@ urlpatterns = [
     url(r'^profile/', include("accounts.urls", namespace='accounts')),
     url(r'^olympiads/', include("olymps.urls", namespace='olymps')),
     url(r'^problems/', include("problems.urls", namespace='problems')),
-    url(r'^courses/', include("school.urls", namespace='courses')),
+    url(r'^courses/', include("courses.urls", namespace='courses')),
+    url(r'^lectures/', include("lectures.urls", namespace='lectures')),
     url(r'^', include("main.urls", namespace='main')),
 ]
 

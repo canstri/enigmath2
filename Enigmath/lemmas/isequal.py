@@ -1,6 +1,5 @@
 from sympy import *
-
-
+from mpmath import *
 
 def isequal(input_exp):
     status = False
@@ -10,8 +9,7 @@ def isequal(input_exp):
     znak2 = ""
     bool1 = False
     dannoe = input_exp
-
-   # dannoe = sympify(dannoe)
+    #dannoe = sympify(dannoe)
     if dannoe == '':
         return ('')
 

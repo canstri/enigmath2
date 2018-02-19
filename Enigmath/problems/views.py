@@ -78,7 +78,7 @@ def problem_thread(request, id):
     save_problem_form = SaveProblemForm(request.POST or None)
 
     if len(check_problem.actions) > 0:
-        if check_problem.actions[0][1] == 'f':
+        if check_problem.actions[0][1] == 'first_hidden':
             check_problem.actions.pop(0) 
             check_problem.save()
     if expression_form.is_valid():

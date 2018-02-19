@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load urlify %}
+{% load crispy_forms_tags %}
+{% block head_extra %}
+{{ form.media }}
+{% endblock head_extra %}
+
+{% block head_title %}
+{{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+
+{% block content %}
+<style type="text/css">
+    .target-courses{
+        color: #ff7477 !important;
+    }
+</style>
+
+<div class='ui container'>
+    <a class="button ui blue" href='{% url "courses:list" %}'>
+        <i class="fas fa-chevron-circle-left"></i> Back to course list
+    </a>
+    <h3></h3>
+    <div class="col-sm-offset-6">
+        <h1>{{ instance.title }} </h1>
+        {% if staff == "yes" %} 
+            <a href='{{ instance.get_update_url }}' class="">Edit</a>
+            <a href='{{ instance.get_delete_url }}' style="color: red;" class="space">Delete</a>
+        {% endif %}
+        <p>{{ instance.content }}</p>
+    </div>
+    <br><br>
+
+    {% for obj in instance.lectures %}
+            <div class="ui segment" style="width:70%;">
+                {% if obj.draft %}<h4 style="color: red">Staff only: Draft</h4>{% endif %} {% if obj.publish > today %}<h4>Staff Only: Future Olympiad</h4>{% endif %}
+                {% if obj.image %}
+                    <a class="oneline" href='{{ obj.get_absolute_url }}'><img class="olymp-image" src='{{ obj.image.url }}'/></a>
+                {% endif %}
+                <div class="oneline">
+                    <h5 class="spacex2">Created by: <a href="{{ obj.get_author }}">{{ obj.user.username }}</a></h5>
+                    <h5 class="spacex2">{{ obj.level }}</h5>
+                    <h1 style="margin-top: 0px;" class="spacex2"><a class="post-title" href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a> </h1>
+                    {% if staff == "yes" %}
+                        <a class="spacex2" href='{{ obj.get_update_url }}'>Edit</a>
+                        <a class="space" style="color: red" href='{{ obj.get_delete_url }}'>Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+    {% endfor %}
+
+
+    {% if staff == "yes" %} 
+        <br><br><br>
+       <h4 style="color: red"> Staff only</h4><h4>Create new Lecture:</h4>
+        <br>        
+        <form class="comment_form" method="POST" action='' enctype='multipart/form-data'> {% csrf_token %}
+            {{ form|crispy }}
+            <input type='submit' class='ui button green' style="margin-top:20px" value='Create Lecture' >
+        </form>
+ 
+    {% endif %}   
+
+
+
+
+{% endblock content %}

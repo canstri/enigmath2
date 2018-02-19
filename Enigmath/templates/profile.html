@@ -51,6 +51,7 @@
                     </div>
                 </div>
             </div>
+            {% if problem_set.count > 0 %}
             <div class="eleven wide column ui raised card">
 
                     <div class="content">
@@ -66,15 +67,14 @@
                                             <div class="date">
                                                 {{ problem.timestamp|timesince }} ago
                                             </div>
-                                            <div class="summary">
-                                                You added problem 
+                                            <div class="summary"> 
                                                 <a href="{{ problem.content_object.get_absolute_url }}">
                                                     {{ problem.title }}
-                                                </a> to <a>{{ problem.content_object.title }}</a>
+                                                </a> in <a>{{ problem.content_object.title }}</a>
                                                  olympiad.
-                              <!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  -->
-                                                 <p style="color: darkred">{{ problem.content }}</p>
-                              <!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  -->
+                                                 <br>
+                                                 {{ problem.content }}
+                                                 <hr>
                                             </div>
                                         </div>
                                     </div>
@@ -84,7 +84,9 @@
                     </div>
 
             </div>
-
+            {% elif hisprofile.user == user %}
+                <h4>You do not have created problems: <a href="">Offer your problem to olympiad</a></h4>
+            {% endif %}
 
 
 

@@ -1,11 +1,76 @@
 {% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% block head_extra %}
+{{ form.media }}
+{% endblock head_extra %}
 {% block content %}
+<style type="text/css">
+    .target-courses{
+        color: #ff7477 !important;
+    }
+</style>
 
 
-    <p>{{ title }}</p>
+<div class='ui container'>
+    <div class="ui grid">
+        <div class=" twelve wide column">
+            <h1>{{ title }}</h1>
+                {% if staff == "yes" %}
+                <h3 style="color: red"> Staff only: <a class="ui button red" href='{% url "courses:create" %}' >Create Course</a></h3>
+            {% endif %}
+        </div>
+        <div class='four wide column'>
+            <form method='GET' action=''>
+                <div class="ui action input">
+                    <input type='text' name='q' placeholder='Search courses' value='{{ request.GET.q }}'/>
+                    <button class="ui button" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+        {% for obj in object_list %}
+            <div class="ui segment" style="width:70%;">
+                {% if obj.draft %}<h4 style="color: red">Staff only: Draft</h4>{% endif %} {% if obj.publish > today %}<h4>Staff Only: Future Course</h4>{% endif %}
+                {% if obj.image %}
+                    <a class="oneline" href='{{ obj.get_absolute_url }}'><img class="olymp-image" src='{{ obj.image.url }}'/></a>
+                {% endif %}
+                <div class="oneline">
+                    <h2 class="oneline spacex2"><a class="post-title" href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a> </h2>
+                </div>
+                <h5 class="spacex2" style="margin-top: 5px;">{{ obj.content }}</h5>
+                {% if staff == "yes" %}
+                    <a class="spacex2" href='{{ obj.get_update_url }}'>Edit</a>
+                    <a href='{{ obj.get_delete_url }} ' style="color: red;" class="space">Delete</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+</div>
 
 
-                                
-   
+
+
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if object_list.has_previous %}
+                <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+            </span>
+
+            {% if object_list.has_next %}
+                <a href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
+
+
+
+</div>
+
+
 
 {% endblock content %}
