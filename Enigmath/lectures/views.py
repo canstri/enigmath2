@@ -9,7 +9,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from .forms import LectureForm
-from .models import Lecture
+from .models import Lecture, PassLecture
 from courses.models import Course
 
 from accounts.models import Profile
@@ -65,9 +65,28 @@ def lecture_detail(request, id=None):
         profile = Profile.objects.get(user = request.user.id)
         is_auth = True
 
+    number_of_solved = 0
     array_of_user = []
     for prblm in instance.problems:
-        array_of_user.append([prblm, CheckProblem.objects.filter(user = request.user.id, problem_id = prblm.id)])
+        cp = CheckProblem.objects.get(user = request.user.id, problem_id = prblm.id)
+        array_of_user.append([prblm, cp])
+        if cp.solved == True:
+            number_of_solved = number_of_solved + 1
+
+    percent = number_of_solved/len(instance.problems)
+    pl = PassLecture.objects.get(user = request.user.id, lecture_id = instance.id)
+    if percent > 0 and percent < 0.3:
+        pl.passed = 1
+        pl.save()
+    if percent >= 0.3 and percent < 0.6:
+        pl.passed = 2
+        pl.save()
+    if percent >= 0.6:
+        pl.passed = 3
+        pl.save()
+
+
+
 
     context = {
         "instance": instance,
@@ -80,6 +99,7 @@ def lecture_detail(request, id=None):
         "user":request.user,
         "is_auth":is_auth,
         "form":form,
+        "pass_lecture":pl.passed,
     }
     return render(request, "lecture_detail.html", context)
 

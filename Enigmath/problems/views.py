@@ -117,10 +117,6 @@ def problem_thread(request, id):
     if request.user.is_staff or request.user.is_superuser:
         staff = "yes"
     
-    l = False
-    if str(obj.content_type) == 'lecture':
-        l = True
-
     context = {
         "staff":staff,
         "profile":profile,
@@ -129,6 +125,5 @@ def problem_thread(request, id):
         "check_problem": check_problem,
         "action_check":action_check,
         "expression_form": expression_form,
-        "l":l,
     }
     return render(request, "problem.html", context)

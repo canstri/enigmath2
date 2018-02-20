@@ -68,13 +68,19 @@
                                                 {{ problem.timestamp|timesince }} ago
                                             </div>
                                             <div class="summary"> 
-                                                <a href="{{ problem.content_object.get_absolute_url }}">
+                                                <a href="{{ problem.get_absolute_url }}">
                                                     {{ problem.title }}
-                                                </a> in <a>{{ problem.content_object.title }}</a>
-                                                 olympiad.
-                                                 <br>
-                                                 {{ problem.content }}
-                                                 <hr>
+                                                </a> in <a href="{{ problem.content_object.get_absolute_url }}">{{ problem.content_object.title }}</a>
+                                                {% if problem.content_type|slugify == "olymp" %}
+                                                    olympiad
+                                                {% endif %}
+                                                {% if problem.content_type|slugify == "lecture" %}
+                                                    lecture
+                                                {% endif %}
+                                                    
+                                                <br>
+                                                {{ problem.content }}
+                                                <hr>
                                             </div>
                                         </div>
                                     </div>

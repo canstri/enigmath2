@@ -16,8 +16,21 @@
 
 <div class='ui container'>
     <div class="ui list">
-        <h1>{{ instance.title }}</h1>
-        </h3>
+        <h1 class="oneline">{{ instance.title }}</h1>
+        <h1 class="oneline spacex2"> 
+            {% if pass_lecture == 0 %}
+                ...
+            {% endif %}
+            {% if pass_lecture == 1 %}
+                @..
+            {% endif %}
+            {% if pass_lecture == 2 %}
+                @@.
+            {% endif %}
+            {% if pass_lecture == 3 %}
+                @@@
+            {% endif %}
+        </h1>
         <h4>Author of lecture: <a href="{{ instance.get_author }}">{{ instance.user.username }}</a></h4>
 
         {% if staff == "yes" %}
@@ -31,7 +44,7 @@
         {% for element_of_user in array_of_user %}
             <a href='{{ element_of_user.0.get_absolute_url }}'><h4>{{ element_of_user.0.title }}</h4></a>
             {% if is_auth == True %}
-                {% if element_of_user.1.0.solved == False %}
+                {% if element_of_user.1.solved == False %}
                     <h4>Not solved</h4>
                 {% else %}
                     <h4>Solved</h4>
