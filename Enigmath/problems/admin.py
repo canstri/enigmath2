@@ -6,7 +6,7 @@ from .models import CheckProblem
 
 
 class ProblemModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "user", "id", "content_object"]
+    list_display = ["title", "user", "id", "content_type", "object_id"]
     list_display_links = ["title"]
 
     search_fields = ["title", "content_object"]

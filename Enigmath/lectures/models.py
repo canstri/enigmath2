@@ -40,7 +40,7 @@ class Lecture(models.Model):
     title = models.CharField(max_length=120)
     timestamp = models.DateTimeField(auto_now_add=True)
     draft = models.BooleanField(default=False)
-    level = models.PositiveIntegerField(null = True)
+    level = models.PositiveIntegerField(default = 0)
     objects = LectureManager()
 
     class Meta:
@@ -75,8 +75,7 @@ class Lecture(models.Model):
 class PassLecture(models.Model):
     user = models.PositiveIntegerField(null = True)
     lecture_id = models.PositiveIntegerField(null = True)
-    passed = models.BooleanField(default=False) 
-
+    passed = models.IntegerField(default=0)
 
 
 

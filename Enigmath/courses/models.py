@@ -26,8 +26,13 @@ def upload_location(instance, filename):
         new_id=0
     return "%s/%s" %(instance.id, filename)
 
+class PassCourse(models.Model):
+    user = models.PositiveIntegerField(null = True)
+    course_id = models.PositiveIntegerField(null = True)
+    passed = models.IntegerField(default=0)
+
 class Course(models.Model):
-    title = models.CharField(max_length=120)
+    title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True)
     image = models.ImageField(upload_to=upload_location, 
             null=True, 
@@ -37,7 +42,7 @@ class Course(models.Model):
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
     content = models.TextField()
-    level = models.CharField(max_length=120)
+    level = models.IntegerField(default=0)
     draft = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 

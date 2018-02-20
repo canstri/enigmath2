@@ -7,11 +7,21 @@
 
 
 {% block content %}
-<style type="text/css">
-    .target-olymps{
-        color: #ff7477 !important;
-    }
-</style>
+{% if l == True %}
+    <style type="text/css">
+        .target-courses{
+            color: #ff7477 !important;
+        }
+    </style>
+
+{% endif %}
+{% if l == False %}
+    <style type="text/css">
+        .target-olymps{
+            color: #ff7477 !important;
+        }
+    </style>
+{% endif %}
 
 {{ object }}
 
@@ -21,6 +31,7 @@
         <a class="ui button blue" href="{{ problem.content_object.get_absolute_url }}">
             <i class="fas fa-chevron-circle-left"></i> List of problems 
         </a>
+        {{ problem.content_type }}
         <p></p>
             {% if check_problem.solved == False %}
                 <h5 class="grey small oneline">Not solved</h5>

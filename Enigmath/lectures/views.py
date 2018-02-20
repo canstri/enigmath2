@@ -17,6 +17,7 @@ from problems.models import Problem
 from problems.models import CheckProblem
 from problems.forms import CreateProblemForm
 
+from .models import PassLecture
 
 def lecture_detail(request, id=None):
     instance = get_object_or_404(Lecture, id=id)
@@ -95,6 +96,8 @@ def lecture_delete(request, id):
 
     if request.method == "POST":
         parent_obj_url = obj.content_object.get_absolute_url()
+        for prblm in obj.problems:
+            prblm.delete()
 
         for passlssn in PassLecture.objects.filter(lecture_id = obj.id):
             passlssn.delete()

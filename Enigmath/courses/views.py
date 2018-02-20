@@ -9,12 +9,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from .forms import CourseForm
-from .models import Course
+from .models import Course, PassCourse
 
-from lectures.models import Lecture
+from lectures.models import Lecture, PassLecture
+
 from lectures.forms import LectureForm
 
 from accounts.models import Profile
+
+
 
 
 def course_create(request):
@@ -25,6 +28,13 @@ def course_create(request):
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
+        for p in Profile.objects.filter():
+            c = PassCourse.objects.get_or_create(
+                user = p.user.id,
+                course_id = instance.id,
+                passed = 0,
+            )
+
         messages.success(request, "Successfully Created")
         return HttpResponseRedirect(instance.get_absolute_url())
     staff = "no"
@@ -58,18 +68,26 @@ def course_detail(request, slug=None):
 
     form = LectureForm(request.POST or None, initial=initial_data)
     if form.is_valid():
-        print("dedede")
         content_type = ContentType.objects.get(model=form.cleaned_data.get("content_type"))
         obj_id = form.cleaned_data.get('object_id')
         content_data = form.cleaned_data.get("content")
         lecture_title = form.cleaned_data.get("title")
-        new_lecture = Lecture.objects.get_or_create(
+        level = form.cleaned_data.get("level")
+        new_lecture, created = Lecture.objects.get_or_create(
                             user = request.user,
                             content_type= content_type,
                             object_id = obj_id,
                             content = content_data,
                             title = lecture_title,
+                            level = level,
                         )
+        for p in Profile.objects.filter():
+            c = PassLecture.objects.get_or_create(
+                user = p.user.id,
+                lecture_id = new_lecture.id,
+                passed = 0,
+            )
+        
         #return HttpResponseRedirect(new_lecture.content_object.get_absolute_url())
     
     staff = "no"
@@ -82,6 +100,12 @@ def course_detail(request, slug=None):
         profile = Profile.objects.get(user = request.user.id)
         is_auth = True
 
+    is_course_passed = PassCourse.objects.get(course_id = instance.id, user = request.user.id).passed
+
+    array_of_user = []
+    for lssn in instance.lectures:
+        array_of_user.append([lssn, PassLecture.objects.get(user = request.user.id, lecture_id = lssn.id)])    
+
     context = {
         "title": instance.title,
         "instance": instance,
@@ -92,6 +116,8 @@ def course_detail(request, slug=None):
         "user":request.user,
         "is_auth":is_auth,
         "form":form,
+        "is_course_passed": is_course_passed,
+        "array_of_user": array_of_user,
     }
     return render(request, "course_detail.html", context)
 
@@ -121,8 +147,14 @@ def course_list(request):
     profile = 'admin'
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
+    
+    array_of_user = []
+    for crs in queryset_list:
+        array_of_user.append([crs, PassCourse.objects.get(user = request.user.id, course_id = crs.id)])    
+
     context = {
-        "object_list": queryset, 
+        "object_list":queryset,
+        "array_of_user": array_of_user,
         "title": "Courses",
         "page_request_var": page_request_var,
         "staff" : staff,
@@ -171,10 +203,10 @@ def course_delete(request, slug=None):
         reponse.status_code = 403
         return HttpResponse("You do not have permission to do this.")
 
-    for lecture in instance.lectures:
-        lecture.delete()
 
     if request.method == "POST":
+        for lecture in instance.lectures:
+            lecture.delete()
         instance.delete()
         messages.success(request, "Successfully deleted")
         return redirect("courses:list")

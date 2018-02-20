@@ -18,32 +18,92 @@
 </style>
 
 <div class='ui container'>
+
     <a class="button ui blue" href='{% url "courses:list" %}'>
         <i class="fas fa-chevron-circle-left"></i> Back to course list
     </a>
     <h3></h3>
     <div class="col-sm-offset-6">
-        <h1>{{ instance.title }} </h1>
+        <h1 class="oneline">{{ instance.title }} </h1>
+        <h1 class="oneline spacex2"> 
+            {% if is_course_passed == 0 %}
+                ...
+            {% endif %}
+            {% if is_course_passed == 1 %}
+                @..
+            {% endif %}
+            {% if is_course_passed == 2 %}
+                @@.
+            {% endif %}
+            {% if is_course_passed == 3 %}
+                @@@
+            {% endif %}
+        </h1>
+
+        <h5 class="">Level: 
+            {% if instance.level == 1 %}
+                <a href="">Easy</a>
+            {% endif %}
+            {% if instance.level == 2 %}
+                <a href="">Middle</a> 
+            {% endif %}
+            {% if instance.level == 3 %}
+                <a href="">Hard</a>
+            {% endif %}
+        </h5>
+
         {% if staff == "yes" %} 
             <a href='{{ instance.get_update_url }}' class="">Edit</a>
             <a href='{{ instance.get_delete_url }}' style="color: red;" class="space">Delete</a>
         {% endif %}
         <p>{{ instance.content }}</p>
+        {% if instance.image %}
+            <img class="" src='{{ instance.image.url }}'/>
+        {% endif %}
     </div>
     <br><br>
 
-    {% for obj in instance.lectures %}
+    {% for obj in array_of_user %}
             <div class="ui segment" style="width:70%;">
-                {% if obj.draft %}<h4 style="color: red">Staff only: Draft</h4>{% endif %} {% if obj.publish > today %}<h4>Staff Only: Future Olympiad</h4>{% endif %}
-                {% if obj.image %}
-                    <a class="oneline" href='{{ obj.get_absolute_url }}'><img class="olymp-image" src='{{ obj.image.url }}'/></a>
+                {% if obj.0.draft %}<h4 style="color: red">Staff only: Draft</h4>{% endif %} {% if obj.0.publish > today %}<h4>Staff Only: Future Olympiad</h4>{% endif %}
+                {% if obj.0.image %}
+                    <a class="oneline" href='{{ obj.0.get_absolute_url }}'><img class="olymp-image" src='{{ obj.0.image.url }}'/></a>
                 {% endif %}
                 <div class="oneline">
-                    <h5 class="spacex2">Created by: <a href="{{ obj.get_author }}">{{ obj.user.username }}</a></h5>
-                    <h5 class="spacex2">{{ obj.level }}</h5>
-                    <h1 style="margin-top: 0px;" class="spacex2"><a class="post-title" href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a> </h1>
+                    <h1 style="margin-top: 0px;" class="oneline">
+                        <a class="post-title" href='{{ obj.0.get_absolute_url }}'>{{ obj.0.title }}</a> 
+                    </h1>
+                    <h1 class="oneline spacex2"> 
+                        {% if obj.1.passed == 0 %}
+                            ...
+                        {% endif %}
+                        {% if obj.1.passed == 1 %}
+                            @..
+                        {% endif %}
+                        {% if obj.1.passed == 2 %}
+                            @@.
+                        {% endif %}
+                        {% if obj.1.passed  == 3 %}
+                            @@@
+                        {% endif %}
+                    </h1>
+                    <br><br>
+                    <h5 class="oneline">Author: <a href="{{ obj.0.get_profile }}">{{ obj.0.user.username }}</a></h5>
+                    <h5 class="oneline">Level: 
+                        {% if obj.0.level == 1 %}
+                            <a href="">Easy</a>
+                        {% endif %}
+                        {% if obj.0.level == 2 %}
+                            <a href="">Middle</a> 
+                        {% endif %}
+                        {% if obj.0.level == 3 %}
+                            <a href="">Hard</a>
+                        {% endif %}
+                    </h5>
+
                     {% if staff == "yes" %}
-                        <a class="spacex2" href='{{ obj.get_update_url }}'>Edit</a>
+                        <br><br>
+                        <a class="" href='{{ obj.get_update_url }}'>Edit</a>
                         <a class="space" style="color: red" href='{{ obj.get_delete_url }}'>Delete</a>
                     {% endif %}
                 </div>
@@ -63,6 +123,6 @@
     {% endif %}   
 
 
-
+</div>
 
 {% endblock content %}
