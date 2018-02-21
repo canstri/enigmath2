@@ -21,18 +21,18 @@
         </a>
         <br><br>
         <h1 class="oneline">Lecture {{ instance.title }}</h1>
-        <h1 class="oneline spacex2"> 
+        <h1 style="color: gold" class="oneline spacex2"> 
             {% if pass_lecture == 0 %}
-                ...
+                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
             {% endif %}
             {% if pass_lecture == 1 %}
-                @..
+                <i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
             {% endif %}
             {% if pass_lecture == 2 %}
-                @@.
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
             {% endif %}
             {% if pass_lecture == 3 %}
-                @@@
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
             {% endif %}
         </h1>
         <h4>Author of lecture: <a href="{{ instance.get_author }}">{{ instance.user.username }}</a></h4>

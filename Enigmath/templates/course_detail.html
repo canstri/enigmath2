@@ -25,18 +25,18 @@
     <h3></h3>
     <div class="col-sm-offset-6">
         <h1 class="oneline">{{ instance.title }} </h1>
-        <h1 class="oneline spacex2"> 
+        <h1 style="color: gold" class="oneline spacex2"> 
             {% if is_course_passed == 0 %}
-                ...
+                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
             {% endif %}
             {% if is_course_passed == 1 %}
-                @..
+                <i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
             {% endif %}
             {% if is_course_passed == 2 %}
-                @@.
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
             {% endif %}
             {% if is_course_passed == 3 %}
-                @@@
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
             {% endif %}
         </h1>
 
@@ -73,18 +73,18 @@
                     <h1 style="margin-top: 0px;" class="oneline">
                         <a class="post-title" href='{{ obj.0.get_absolute_url }}'>{{ obj.0.title }}</a> 
                     </h1>
-                    <h1 class="oneline spacex2"> 
+                    <h1 style="color: gold" class="oneline spacex2"> 
                         {% if obj.1.passed == 0 %}
-                            ...
+                            <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
                         {% endif %}
                         {% if obj.1.passed == 1 %}
-                            @..
+                            <i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
                         {% endif %}
                         {% if obj.1.passed == 2 %}
-                            @@.
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
                         {% endif %}
                         {% if obj.1.passed  == 3 %}
-                            @@@
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                         {% endif %}
                     </h1>
                     <br><br>

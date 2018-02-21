@@ -35,18 +35,18 @@
                     <a class="oneline" href='{{ obj.get_absolute_url }}'><img class="olymp-image" src='{{ obj.image.url }}'/></a>
                 {% endif %} -->
                     <h2 class="oneline"><a class="post-title" href='{{ obj.0.get_absolute_url }}'>{{ obj.0.title }}</a> </h2>
-                    <h1 class="oneline spacex2"> 
+                    <h1 style="color: gold" class="oneline spacex2"> 
                         {% if obj.1.passed == 0 %}
-                            ...
+                            <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
                         {% endif %}
                         {% if obj.1.passed == 1 %}
-                            @..
+                            <i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
                         {% endif %}
                         {% if obj.1.passed == 2 %}
-                            @@.
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
                         {% endif %}
                         {% if obj.1.passed  == 3 %}
-                            @@@
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                         {% endif %}
                     </h1>
                 <h5 class=" ">Level: 
