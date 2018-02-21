@@ -16,7 +16,11 @@
 
 <div class='ui container'>
     <div class="ui list">
-        <h1 class="oneline">{{ instance.title }}</h1>
+        <a class="button ui blue" href='{{ instance.content_object.get_absolute_url }}'>
+            <i class="fas fa-chevron-circle-left"></i> Back to course
+        </a>
+        <br><br>
+        <h1 class="oneline">Lecture {{ instance.title }}</h1>
         <h1 class="oneline spacex2"> 
             {% if pass_lecture == 0 %}
                 ...

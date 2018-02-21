@@ -104,7 +104,7 @@
                     {% if staff == "yes" %}
                         <br><br>
                         <a class="" href='{{ obj.get_update_url }}'>Edit</a>
-                        <a class="space" style="color: red" href='{{ obj.get_delete_url }}'>Delete</a>
+                        <a class="space" style="color: red" href='{{ obj.0.get_delete_url }}'>Delete</a>
                     {% endif %}
                 </div>
             </div>

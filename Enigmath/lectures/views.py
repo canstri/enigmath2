@@ -73,7 +73,9 @@ def lecture_detail(request, id=None):
         if cp.solved == True:
             number_of_solved = number_of_solved + 1
 
-    percent = number_of_solved/len(instance.problems)
+    percent = 0
+    if len(instance.problems) > 0:
+        percent = number_of_solved/len(instance.problems)
     pl = PassLecture.objects.get(user = request.user.id, lecture_id = instance.id)
     if percent > 0 and percent < 0.3:
         pl.passed = 1

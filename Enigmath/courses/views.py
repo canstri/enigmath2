@@ -100,11 +100,27 @@ def course_detail(request, slug=None):
         profile = Profile.objects.get(user = request.user.id)
         is_auth = True
 
-    is_course_passed = PassCourse.objects.get(course_id = instance.id, user = request.user.id).passed
+    is_course_passed = PassCourse.objects.get(course_id = instance.id, user = request.user.id)
 
+    x = 0
     array_of_user = []
     for lssn in instance.lectures:
-        array_of_user.append([lssn, PassLecture.objects.get(user = request.user.id, lecture_id = lssn.id)])    
+        pl = PassLecture.objects.get(user = request.user.id, lecture_id = lssn.id)
+        array_of_user.append([lssn, pl])
+        x = x + int(pl.passed)
+    percent = 0
+    if len(instance.lectures) > 0:
+        percent = x/(3*len(instance.lectures))
+    if percent > 0 and percent < 0.3:
+        is_course_passed.passed = 1
+        is_course_passed.save()
+    if percent >= 0.3 and percent < 0.6:
+        is_course_passed.passed = 2
+        is_course_passed.save()
+    if percent >= 0.6:
+        is_course_passed.passed = 3
+        is_course_passed.save()
+
 
     context = {
         "title": instance.title,
@@ -116,7 +132,7 @@ def course_detail(request, slug=None):
         "user":request.user,
         "is_auth":is_auth,
         "form":form,
-        "is_course_passed": is_course_passed,
+        "is_course_passed": is_course_passed.passed,
         "array_of_user": array_of_user,
     }
     return render(request, "course_detail.html", context)
