@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>{% block head_title %}Enigmath{% endblock head_title %}</title>
+	<title>{% block head_title %}Bastau Academy{% endblock head_title %}</title>
 
 
 	
@@ -11,8 +11,8 @@
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,500&amp;subset=cyrillic" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href='{% static "css/semantic.min.css" %}'>
 	<link rel='stylesheet' href='{% static "css/base.css" %}' />
-	<link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
-
+	<link rel="icon" href='{% static "images/favicon.ico" %}' type="image/png">
+	
 
 	
 	<link href="https://fonts.googleapis.com/css?family=Anton|Francois+One|Kanit|Oswald" rel="stylesheet">
@@ -49,14 +49,14 @@
 				<hr class="hr-head">
 				<br>
 				<div class="ten wide column oneline" style="text-align: left">
-					<a href='{% url "main:home" %}' class="logo">E n i g m a t h</a>	
+					<a href='{% url "main:home" %}' class="logo">Bastau academy</a> 
 				</div>
 				<div class="right">
 					<a class="target target-olymps" href='{% url "olymps:list" %}' >
 						Olympiads
 					</a>
 					<a class="target target-ratings spacex2" href='{% url "news:list" %}'>
-						Ratings
+						Groups
 					</a>
 					<a class="target target-news spacex2" href='{% url "news:list" %}'>
 						News
@@ -64,20 +64,11 @@
 					<a class="target target-courses spacex2" href='{% url "courses:list" %}'>
 						Courses
 					</a>
-					<a class="target target-contacts spacex2" href='{% url "main:contacts" %}'>
-						Contacts
-					</a>
 				</div>
 
 			</div>
 		</div>
-<!-- 		<div class="ui container centered" style="padding-bottom: 40px;">
-			<div class="ui grid">
-				<div class="ui five item menu header-menu">
-				</div>
-			</div>
-		</div>
- -->	</div>
+	</div>
 			
 		
 
@@ -111,7 +102,7 @@
 						<h4 class="ui inverted header">Contacts</h4>
 						<div class="ui inverted link list">
 							<p href="#" class="item">Write us on mail</p>
-							<a href="#" class="item">enigmath@enigmath.com</a>
+							<a href="#" class="item">bastau@bastau.com</a>
 						</div>
 					</div>
 					<div class="three wide column">
@@ -126,7 +117,7 @@
 					
 				</div>
 				<div class="ui inverted section divider"></div>
-				<div class="logo-footer centered">ENIGMATH</div>
+				<div class="logo-footer centered">BASTAU<br>academy</div>
 				<div class="ui horizontal inverted small divided link list">
 					<a class="item" href="#">Site Map</a>
 					<a class="item" href="#">Contact Us</a>

@@ -8,8 +8,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
-from .forms import LectureForm
-from .models import Lecture, PassLecture
+from .forms import SetForm
+from .models import Set, PassSet
 from courses.models import Course
 
 from accounts.models import Profile
@@ -17,14 +17,12 @@ from problems.models import Problem
 from problems.models import CheckProblem
 from problems.forms import CreateProblemForm
 
-from .models import PassLecture
+from .models import PassSet
 
-def lecture_detail(request, id=None):
-    instance = get_object_or_404(Lecture, id=id)
-    if instance.draft:
-        if not request.user.is_staff or not request.user.is_superuser:
-            raise Http404
-
+def set_detail(request, id=None):
+    if not request.user.is_authenticated:
+        raise Http404
+    instance = get_object_or_404(Set, id=id)
     share_string = quote_plus(instance.content)
 
     initial_data={
@@ -32,43 +30,21 @@ def lecture_detail(request, id=None):
         "object_id": instance.id,
     }
 
-    form = CreateProblemForm(request.POST or None, initial=initial_data)
+    add_problem_form = AddProblemForm(request.POST or None, initial=initial_data)
+    if add_problem_form.is_valid():
+        prblm_id = add_problem_form.cleaned_data.get("prblm_id")
+        instance.problem_list.append(prblm_id)
 
-    if form.is_valid():
-        content_type = ContentType.objects.get(model=form.cleaned_data.get("content_type"))
-        obj_id = form.cleaned_data.get('object_id')
-        content_data = form.cleaned_data.get("content")
-        problem_title = form.cleaned_data.get("title")
-        new_problem, created = Problem.objects.get_or_create(
-                            user = request.user,
-                            content_type= content_type,
-                            object_id = obj_id,
-                            content = content_data,
-                            title = problem_title,
-                        )
-        for p in Profile.objects.filter():
-            c = CheckProblem.objects.get_or_create(
-                user = p.user.id,
-                problem_id = new_problem.id,
-                solved = False,
-            )
-        return HttpResponseRedirect(new_problem.content_object.get_absolute_url())
-
-    
     staff = "no"
     if request.user.is_staff or request.user.is_superuser:
         staff = "yes"
 
-    profile = 'admin'
-    is_auth = False
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-        is_auth = True
-
+    profile = Profile.objects.get(user = request.user.id)
     number_of_solved = 0
     array_of_user = []
-    for prblm in instance.problems:
-        cp = CheckProblem.objects.get(user = request.user.id, problem_id = prblm.id)
+    for prbl_id in instance.problem_list:
+        prblm = Problem.objects.get(id = prbl_id)
+        cp = CheckProblem.objects.get(user = request.user.id, problem_id = prbl_id)
         array_of_user.append([prblm, cp])
         if cp.solved == True:
             number_of_solved = number_of_solved + 1
@@ -76,7 +52,7 @@ def lecture_detail(request, id=None):
     percent = 0
     if len(instance.problems) > 0:
         percent = number_of_solved/len(instance.problems)
-    pl = PassLecture.objects.get(user = request.user.id, lecture_id = instance.id)
+    pl = PassSet.objects.get(user = request.user.id, set_id = instance.id)
     if percent > 0 and percent < 0.3:
         pl.passed = 1
         pl.save()
@@ -94,22 +70,21 @@ def lecture_detail(request, id=None):
         "instance": instance,
         "share_string": share_string,
         "array_of_user": array_of_user,
-        "lecture_url":instance.get_absolute_url(),
+        "set_url":instance.get_absolute_url(),
         "create_problem_form":form,
         "staff":staff,
         "profile":profile,
         "user":request.user,
-        "is_auth":is_auth,
         "form":form,
-        "pass_lecture":pl.passed,
+        "pass_set":pl.passed,
         "number_of_solved": number_of_solved,
     }
-    return render(request, "lecture_detail.html", context)
+    return render(request, "set_detail.html", context)
 
 
-def lecture_delete(request, id):
+def set_delete(request, id):
     try:
-        obj = Lecture.objects.get(id=id)
+        obj = Set.objects.get(id=id)
     except:
         raise Http404
 
@@ -122,7 +97,7 @@ def lecture_delete(request, id):
         for prblm in obj.problems:
             prblm.delete()
 
-        for passlssn in PassLecture.objects.filter(lecture_id = obj.id):
+        for passlssn in PassSet.objects.filter(set_id = obj.id):
             passlssn.delete()
 
         obj.delete()

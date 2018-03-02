@@ -23,6 +23,13 @@
 .spacex2{
     margin-left: 30px;    
 }
+.up{
+    margin-top: -10px;
+}
+.down{
+    margin-top: 30px !important;
+}
+
 .right{
     float: right;
 }
@@ -50,11 +57,11 @@ a:hover{
 img { height:200px; width:300px}
 
 .big-header{
-    background-color: #152b42;
+    background-color: #101727;
     height: 110px;
 }
 .main-header-part{
-    background-color: #152b42 !important;
+    background-color: #101727 !important;
     margin-top: -50px
 }
 .hr-head{
@@ -63,12 +70,9 @@ img { height:200px; width:300px}
 
 .logo{
     font-size: 22px;
-    margin-top: 10px;
-    text-transform: uppercase;
     color: #FFF;
-    border: 2px solid #FFF;
-    padding: 3px 55px;
-    font-weight: 500;
+    border: 1px solid lightgrey;
+    padding: 0px 35px 4px 35px;
     font-family: 'Oswald', times, san-serif;
     text-decoration: none;
 }
@@ -76,7 +80,6 @@ img { height:200px; width:300px}
     color:#FFF;
     text-decoration: none;
 }
-
 .header-logo{
     margin-top: 0 !important;
     //background-color: #EDF5E1;
@@ -145,10 +148,11 @@ a:hover{
     height:220px;
 }
 #segment-choice{
-    width: 100%;
+    width: 97%;
     border-radius: unset;
-    background-color: #152b42 !important;
+    background-color: #101727 !important;
 
+    background-image: url("qwe.png") !important;
 }
 
 .content{
