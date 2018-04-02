@@ -1,4 +1,5 @@
 from sympy import *
+from lemmas.split import splitting
 class LemmaCode(object):
     def isequal(input_exp):
         status = False
@@ -6,31 +7,17 @@ class LemmaCode(object):
 
         RHS = ""
         LHS = ""
-        znak1 = ""
-        znak2 = ""
+        znak = ""
 
         bool = False
-        for i in range(0, len(newStr)):
-            if (newStr[i] == ">" and newStr[i+1] == "=") or (newStr[i] == "<" and newStr[i+1] == "="):
-                bool = True
-                znak1 += newStr[i] + newStr[i+1]
-                i = i+1
-                continue
-            elif newStr[i] == ">" or newStr[i] == "=" or  newStr[i] == "<":
-                bool = True
-                znak1 += newStr[i]
-                continue
-            if bool == True:
-                RHS += newStr[i]
-            if bool == False:
-                LHS += newStr[i]
-
-        LHS = simplify(sympify(LHS).expand()) 
-        RHS = simplify(sympify(RHS).expand())
+        splitted_array = splitting(newStr)
+        LHS = splitted_array[0]
+        RHS = splitted_array[1]
+        znak = splitted_array[2]
         result = 'Wrong'
-        if LHS == RHS:
+        if LHS.expand() == RHS.expand() and znak == '=':
             status = True
         if status == True:
             result = 'Correct'
         return result
-        
+    

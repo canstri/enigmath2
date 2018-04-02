@@ -70,10 +70,6 @@ class CheckProblem(models.Model):
     actions = ArrayField(ArrayField(models.TextField()), default=[['first', 'first_hidden']])
     solved = models.BooleanField(default=False) 
 
-
-    # def delete():
-    #     return reverse("problems:exp_delete")
-
 class Lemma(models.Model):
     name = models.TextField(default='de')
 

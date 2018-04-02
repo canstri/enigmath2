@@ -58,25 +58,22 @@ def problem_thread(request, id):
 
     content_object = obj.content_object 
     content_id = obj.content_object.id
-
     initial_data = {
             "content_type": obj.content_type,
             "object_id": obj.object_id
     }
-
     if request.user.id:
         check_problem = CheckProblem.objects.get(problem_id = obj.id, user = request.user.id)
     else:
         messages.warning(request, "You need to authanticate to see problems")
         return HttpResponseRedirect(obj.content_object.get_absolute_url())
     
+    expression_form = ExpressionForm(request.POST or None)
+    save_problem_form = SaveProblemForm(request.POST or None)
+    expr1 = ''
+    expr2 = ''
     action_check = ''
     action_check2 = ''
-
-    
-    expression_form = ExpressionForm(request.POST or None)
-    
-    save_problem_form = SaveProblemForm(request.POST or None)
 
     if len(check_problem.actions) > 0:
         if check_problem.actions[0][1] == 'first_hidden':
@@ -100,9 +97,20 @@ def problem_thread(request, id):
         for i in range (0, len(Lemma.objects.filter())):
             if action_check == "Correct" and action_check2 == "Correct":
                 break
-            action_check = getattr(LemmaCode, Lemma.objects.filter()[i].name)(expr1)
+        if expr1 != '':    
+            action_check =  getattr(LemmaCode, Lemma.objects.filter()[i].name)(expr1)
+        if expr2 != '':
             action_check2 = getattr(LemmaCode, Lemma.objects.filter()[i].name)(expr2)
-
+        all_solved = True
+        for actn in check_problem.actions:
+            if actn[1] == 'Need to prove':
+                if actn[0] != expr1 and actn[0] != expr2:
+                    all_solved = False
+        
+        if all_solved == True:
+            check_problem.solved = True
+            check_problem.save()
+                                        
         if 'save' in request.POST:
             if action_check != '':
                 check_problem.actions.append([expr1, action_check])

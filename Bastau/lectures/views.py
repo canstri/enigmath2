@@ -39,7 +39,7 @@ def lecture_detail(request, id=None):
         obj_id = form.cleaned_data.get('object_id')
         content_data = form.cleaned_data.get("content")
         problem_title = form.cleaned_data.get("title")
-        new_problem, created = Problem.objects.get_or_create(
+        new_problem = Problem.objects.create(
                             user = request.user,
                             content_type= content_type,
                             object_id = obj_id,
@@ -47,11 +47,37 @@ def lecture_detail(request, id=None):
                             title = problem_title,
                         )
         for p in Profile.objects.filter():
-            c = CheckProblem.objects.get_or_create(
+            check_problem = CheckProblem.objects.create(
                 user = p.user.id,
                 problem_id = new_problem.id,
                 solved = False,
             )
+            check_problem.actions = []
+            counter1 = 0
+            counter2 = 0
+            temp_str1 = ''
+            temp_str2 = ''
+            for i in range(0, len(new_problem.content)):
+                if new_problem.content[i] == '$':
+                    counter1 += 1
+                if counter1 % 2 == 1:    
+                    temp_str1 += new_problem.content[i]
+                if counter1 % 2 == 0 and counter1 > 0:
+                    temp_str1 = temp_str1[1:]
+                    check_problem.actions.append([temp_str1, 'Correct'])
+                    temp_str1 = ''
+                    counter1 = 0
+
+                if new_problem.content[i] == '!':
+                    counter2 += 1
+                if counter2 % 2 == 1:    
+                    temp_str2 += new_problem.content[i]
+                if counter2 % 2 == 0 and counter2 > 0:
+                    temp_str2 = temp_str2[1:]
+                    check_problem.actions.append([temp_str2, 'Need to prove'])
+                    temp_str2 = ''
+                    counter2 = 0
+            check_problem.save()
         return HttpResponseRedirect(new_problem.content_object.get_absolute_url())
 
     
